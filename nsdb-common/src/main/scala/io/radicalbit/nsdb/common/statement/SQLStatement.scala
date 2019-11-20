@@ -178,6 +178,17 @@ final case class AbsoluteComparisonValue[T](override val value: T) extends Compa
 final case class RelativeComparisonValue[T](override val value: T, operator: String, quantity: T, unitMeasure: String)
     extends ComparisonValue[T]
 
+// Timestamp
+sealed trait TimestampValue {
+  def timestamp: Long
+}
+
+case class AbsoluteTimestampValue(override val timestamp: Long) extends TimestampValue
+case class RelativeTimestampValue(override val timestamp: Long, quantity: Long, unitMeasure: String)
+    extends TimestampValue
+
+// Timestamp
+
 sealed trait GroupByAggregation {
   def dimension: String
 }

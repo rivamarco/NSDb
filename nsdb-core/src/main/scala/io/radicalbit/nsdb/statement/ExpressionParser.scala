@@ -39,14 +39,12 @@ object ExpressionParser {
   def parseExpression(exp: Option[Expression], schema: Map[String, SchemaField]): Try[ParsedExpression] = {
     val q = exp match {
       case Some(NullableExpression(dimension)) => nullableExpression(schema, dimension)
-
       case Some(EqualityExpression(dimension, ComparisonValue(value))) => equalityExpression(schema, dimension, value)
       case Some(LikeExpression(dimension, value))                      => likeExpression(schema, dimension, value)
       case Some(ComparisonExpression(dimension, operator: ComparisonOperator, ComparisonValue(value))) =>
         comparisonExpression(schema, dimension, operator, value)
       case Some(RangeExpression(dimension, ComparisonValue(value1), ComparisonValue(value2))) =>
         rangeExpression(schema, dimension, value1, value2)
-
       case Some(UnaryLogicalExpression(expression, _)) => unaryLogicalExpression(schema, expression)
 
       case Some(TupledLogicalExpression(expression1, operator: TupledLogicalOperator, expression2: Expression)) =>
