@@ -42,11 +42,9 @@ object ExpressionParser {
 
       case Some(EqualityExpression(dimension, value)) =>
         value match {
-
           case RelativeTimestampValue(timestamp, _, _) => equalityExpression(schema, dimension, timestamp)
           case AbsoluteTimestampValue(timestamp)       => equalityExpression(schema, dimension, timestamp)
           case _                                       => equalityExpression(schema, dimension, value)
-
         }
 
       case Some(LikeExpression(dimension, value)) => likeExpression(schema, dimension, value)
