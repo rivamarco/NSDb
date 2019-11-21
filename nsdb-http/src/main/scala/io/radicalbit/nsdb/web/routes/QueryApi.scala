@@ -116,11 +116,10 @@ trait QueryApi {
   implicit val formats: DefaultFormats
 
   @ApiModel(description = "Query Response")
-  case class QueryResponse(
-      @(ApiModelProperty @field)(value = "query result as a Seq of Bits ") records: Seq[Bit],
-      @(ApiModelProperty @field)(value = "json representation of query ", required = false, dataType = "SQLStatement") parsed: Option[
-        SQLStatement],
-  )
+  case class QueryResponse(@(ApiModelProperty @field)(value = "query result as a Seq of Bits ") records: Seq[Bit],
+                           @(ApiModelProperty @field)(value = "json representation of query ",
+                                                      required = false,
+                                                      dataType = "SQLStatement") parsed: Option[SQLStatement])
 
   @ApiOperation(value = "Perform query", nickname = "query", httpMethod = "POST", response = classOf[QueryResponse])
   @ApiImplicitParams(
