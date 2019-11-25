@@ -25,7 +25,12 @@ class RelativeTimeSQLStatementSpec extends WordSpec with Matchers {
 
   private val parser = new SQLStatementParser
 
-  private val eps = 100
+  private val seconds = 1000L
+  private val minutes = 60 * seconds
+  private val hours = 60 * minutes
+  private val days = 24 * hours
+
+  private val timestampTolerance = 100L
 
   "A SQL parser instance" when {
 
@@ -41,7 +46,7 @@ class RelativeTimeSQLStatementSpec extends WordSpec with Matchers {
 
         val now = System.currentTimeMillis()
 
-        expression.value.timestamp shouldBe (now - 10 * 1000) +- eps
+        expression.value.timestamp shouldBe now - 10 * seconds +- timestampTolerance
         expression.value.quantity shouldBe 10
         expression.value.unitMeasure shouldBe "S"
       }
@@ -58,7 +63,7 @@ class RelativeTimeSQLStatementSpec extends WordSpec with Matchers {
           selectSQLStatement.condition.value.expression.asInstanceOf[ComparisonExpression[RelativeTimestampValue]]
 
         val now = System.currentTimeMillis()
-        expression.value.timestamp shouldBe (now - 10 * 1000L) +- 100
+        expression.value.timestamp shouldBe now - 10 * seconds +- timestampTolerance
         expression.value.quantity shouldBe 10
         expression.value.unitMeasure shouldBe "S"
       }
@@ -78,11 +83,11 @@ class RelativeTimeSQLStatementSpec extends WordSpec with Matchers {
         val firstTimestamp  = expression.expression1.asInstanceOf[ComparisonExpression[RelativeTimestampValue]].value
         val secondTimestamp = expression.expression2.asInstanceOf[ComparisonExpression[RelativeTimestampValue]].value
 
-        firstTimestamp.timestamp shouldBe (now + (5 * 1000L)) +- 100
+        firstTimestamp.timestamp shouldBe now + 5 * seconds +- timestampTolerance
         firstTimestamp.quantity shouldBe 5
         firstTimestamp.unitMeasure shouldBe "S"
 
-        secondTimestamp.timestamp shouldBe (now - (8 * 24 * 3600 * 1000L)) +- 100
+        secondTimestamp.timestamp shouldBe now - 8 * days +- timestampTolerance
         secondTimestamp.quantity shouldBe 8
         secondTimestamp.unitMeasure shouldBe "D"
       }
@@ -106,15 +111,15 @@ class RelativeTimeSQLStatementSpec extends WordSpec with Matchers {
           secondExpression.expression1.asInstanceOf[ComparisonExpression[RelativeTimestampValue]].value
         val thirdTimestamp = secondExpression.expression2.asInstanceOf[EqualityExpression[RelativeTimestampValue]].value
 
-        firstTimestamp.timestamp shouldBe (now + (30 * 24 * 3600 * 1000L)) +- 100
+        firstTimestamp.timestamp shouldBe now + 30 * days +- timestampTolerance
         firstTimestamp.quantity shouldBe 30
         firstTimestamp.unitMeasure shouldBe "D"
 
-        secondTimestamp.timestamp shouldBe (now - (2 * 3600 * 1000L)) +- 100
+        secondTimestamp.timestamp shouldBe now - 2 * hours +- timestampTolerance
         secondTimestamp.quantity shouldBe 2
         secondTimestamp.unitMeasure shouldBe "H"
 
-        thirdTimestamp.timestamp shouldBe (now + (4 * 60 * 1000L)) +- 100
+        thirdTimestamp.timestamp shouldBe now + 4 * minutes +- timestampTolerance
         thirdTimestamp.quantity shouldBe 4
         thirdTimestamp.unitMeasure shouldBe "M"
       }
@@ -142,15 +147,15 @@ class RelativeTimeSQLStatementSpec extends WordSpec with Matchers {
         val secondTimestamp =
           secondExpression.expression2.asInstanceOf[ComparisonExpression[RelativeTimestampValue]].value
 
-        firstTimestamp.timestamp shouldBe (now + (30 * 24 * 3600 * 1000L)) +- 100
+        firstTimestamp.timestamp shouldBe now + 30 * days +- timestampTolerance
         firstTimestamp.quantity shouldBe 30
         firstTimestamp.unitMeasure shouldBe "D"
 
-        secondTimestamp.timestamp shouldBe (now - (2 * 3600 * 1000L)) +- 100
+        secondTimestamp.timestamp shouldBe now - 2 * hours +- timestampTolerance
         secondTimestamp.quantity shouldBe 2
         secondTimestamp.unitMeasure shouldBe "H"
 
-        thirdTimestamp.timestamp shouldBe (now + (4 * 60 * 1000L)) +- 100
+        thirdTimestamp.timestamp shouldBe now + 4 * minutes +- timestampTolerance
         thirdTimestamp.quantity shouldBe 4
         thirdTimestamp.unitMeasure shouldBe "M"
       }
@@ -167,10 +172,10 @@ class RelativeTimeSQLStatementSpec extends WordSpec with Matchers {
 
         val now = System.currentTimeMillis()
         expression.dimension shouldBe "timestamp"
-        expression.value1.timestamp shouldBe (now - 2 * 1000) +- 100
+        expression.value1.timestamp shouldBe now - 2 * seconds +- timestampTolerance
         expression.value1.quantity shouldBe 2
         expression.value1.unitMeasure shouldBe "S"
-        expression.value2.timestamp shouldBe (now + 4 * 1000) +- 100
+        expression.value2.timestamp shouldBe now + 4 * seconds +- timestampTolerance
         expression.value2.quantity shouldBe 4
         expression.value2.unitMeasure shouldBe "S"
       }
@@ -187,10 +192,10 @@ class RelativeTimeSQLStatementSpec extends WordSpec with Matchers {
 
         val now = System.currentTimeMillis()
         expression.dimension shouldBe "timestamp"
-        expression.value1.timestamp shouldBe (now - 2 * 1000) +- 100
+        expression.value1.timestamp shouldBe now - 2 * seconds +- timestampTolerance
         expression.value1.quantity shouldBe 2
         expression.value1.unitMeasure shouldBe "S"
-        expression.value2.timestamp shouldBe (now + 4 * 1000) +- 100
+        expression.value2.timestamp shouldBe now + 4 * seconds +- timestampTolerance
         expression.value2.quantity shouldBe 4
         expression.value2.unitMeasure shouldBe "S"
       }
@@ -207,7 +212,7 @@ class RelativeTimeSQLStatementSpec extends WordSpec with Matchers {
 
         val now = System.currentTimeMillis()
         expression.dimension shouldBe "timestamp"
-        expression.value1.timestamp shouldBe (now - 2 * 1000L) +- 100
+        expression.value1.timestamp shouldBe now - 2 * seconds +- timestampTolerance
         expression.value1.quantity shouldBe 2
         expression.value1.unitMeasure shouldBe "S"
         expression.value2 shouldBe 5
