@@ -38,7 +38,7 @@ object ExpressionParser {
     */
   def parseExpression(exp: Option[Expression], schema: Map[String, SchemaField]): Try[ParsedExpression] = {
     val q = exp match {
-      case Some(NullableExpression(dimension)) => nullableExpression(schema, dimension)
+      case Some(NullableExpression(dimension))                         => nullableExpression(schema, dimension)
       case Some(EqualityExpression(dimension, ComparisonValue(value))) => equalityExpression(schema, dimension, value)
       case Some(LikeExpression(dimension, value))                      => likeExpression(schema, dimension, value)
       case Some(ComparisonExpression(dimension, operator: ComparisonOperator, ComparisonValue(value))) =>
